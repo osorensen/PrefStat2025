@@ -1,0 +1,4 @@
+"0","set.seed(12)
+sample_mallows(rho0 = 1:5, alpha0 = 2, n_samples = 4)"
+"2","/bin/sh: webr-r: command not found
+"

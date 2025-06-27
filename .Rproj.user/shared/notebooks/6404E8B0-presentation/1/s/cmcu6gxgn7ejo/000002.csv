@@ -1,0 +1,9 @@
+"0","mod <- compute_mallows(
+  data = setup_rank_data(preferences = beach_preferences),
+  compute_options = set_compute_options(nmc = 5000, save_aug = TRUE)
+)
+burnin(mod) <- 2500
+compute_consensus(mod)
+plot_top_k(mod, k = 3)"
+"2","/bin/sh: webr-r: command not found
+"

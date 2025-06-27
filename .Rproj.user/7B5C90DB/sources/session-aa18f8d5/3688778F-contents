@@ -1,0 +1,1407 @@
+---
+title: "Maskinlæring"
+subtitle: Modum Bad / Hokksund, 28.11.2024
+author: Øystein Sørensen
+engine: knitr
+filters:
+  - webr
+webr: 
+  show-startup-message: false
+format:
+  revealjs: 
+    theme: serif
+    chalkboard: true
+include-in-header:
+  text: |
+    <style>
+    .cell-output-stdout {
+      overflow-y: scroll;
+      max-height: 300px;
+    }
+    </style>
+editor: source
+bibliography: referanser.bib
+---
+
+```{r setup}
+knitr::opts_chunk$set(cache = TRUE)
+library(tidyverse)
+theme_set(theme_bw())
+theme_update(panel.grid = element_blank())
+library(mgcv)
+library(patchwork)
+library(ISLR2)
+library(glmnet)
+```
+
+## Kort om meg
+
+- Professor i Biostatistikk ved Psykologisk Institutt, UiO.
+- Tilknyttet Integreat, Senter for kunnskapsdrevet maskinlæring (SFF).
+- Underviser i kvantitativ metode og maskinlæring.
+
+## Plan for dagen
+
+- Hva er maskinlæring?
+- Klassifikasjon og regresjon.
+- Regularisering.
+- Hands-on del 1.
+- Trebaserte metoder.
+- Hands-on del 2.
+- Chatboter og språkmodeller.
+
+# Hva er maskinlæring?
+
+## Maskinlæring
+
+- Supervised learning
+  - Inkludert semi-supervised learning
+- Unsupervised learning
+- Reinforcement learning
+
+## Supervised learning
+
+-   Regresjon
+-   Klassifikasjon
+
+## Regresjon {.smaller #sec-barneseter}
+
+::: panel-tabset
+### Salg av barneseter
+
+![](figurer/barnesete.webp){fig-align="center" height="400"}
+
+### Data
+
+```{r}
+options(knitr.kable.max_rows = 8)
+knitr::kable(Carseats)
+```
+
+### Numeriske prediktorer
+
+```{r}
+dat1 <- Carseats %>% 
+  select(-ShelveLoc, -Urban, -US)
+
+dat1 %>% 
+  pivot_longer(cols = -Sales) %>% 
+  ggplot(aes(x = value, y = Sales)) + 
+  geom_point() +
+  facet_wrap(vars(name), scales = "free")
+```
+
+### Kategoriske prediktorer
+
+```{r}
+dat2 <- Carseats %>% 
+  select(Sales, where(is.factor)) %>% 
+  mutate(
+    ShelveLoc = factor(ShelveLoc, levels = c("Bad", "Medium", "Good"))
+  )
+
+p1 <- ggplot(dat2, aes(x = ShelveLoc, y = Sales, fill = ShelveLoc)) + 
+  geom_violin() + 
+  geom_point(position = position_jitter(seed = 1, width = 0.2)) + 
+  theme(legend.position = "none")
+
+p2 <- ggplot(dat2, aes(x = Urban, y = Sales, fill = Urban)) + 
+  geom_violin() + 
+  geom_point(position = position_jitter(seed = 1, width = 0.2)) + 
+  theme(legend.position = "none")
+
+p3 <- ggplot(dat2, aes(x = US, y = Sales, fill = US)) + 
+  geom_violin() + 
+  geom_point(position = position_jitter(seed = 1, width = 0.2)) + 
+  theme(legend.position = "none")
+
+p1 + p2 + p3
+```
+:::
+
+
+::: footer
+Data fra @jamesIntroductionStatisticalLearning2021, eksempel i [Seksjon @sec-overtilpasning].
+:::
+
+## Regresjon
+
+::: incremental
+-   Utfall $y_{i}$ for observasjoner $i=1,2,\dots,n$.
+
+-   Prediktorer $x_{1i}, x_{2i}, \dots, x_{pi}$ for observasjoner $i=1,2,\dots,n$.
+
+-   Hypotese, det finnes en sammenheng, $$
+    y = f(x_{1},x_{2}, \dots, x_{p}) + \epsilon.
+    $$
+
+-   Mål, lage et estimat $\hat{f}$, så $$
+    \hat{y} = \hat{f}(x_{1},x_{2}, \dots, x_{p}).
+    $$
+:::
+
+::: notes
+Merk, jeg sier ingenting om p-verdier, konfidensintervaller eller tolkning av f.
+:::
+
+## Klassifikasjon {.smaller}
+
+::: panel-tabset
+### Minute Maid eller Citrus Hill?
+
+![](figurer/minute-maid.webp){height="300" fig-align="center"}
+![](figurer/citrus-hill.jpg){height="300" fig-align="center"}
+
+### Data
+
+```{r}
+dat <- OJ %>% 
+  select(-StoreID, -Store7, -STORE)
+
+knitr::kable(dat)
+```
+
+### Prediktorer
+
+```{r}
+dat %>% 
+  select(Purchase, where(is.numeric)) %>% 
+  pivot_longer(cols = -Purchase) %>% 
+  ggplot(aes(x = Purchase, y = value, fill = Purchase)) + 
+  geom_boxplot() +
+  facet_wrap(vars(name), scales = "free_y") +
+  theme(legend.position = "none")
+```
+:::
+
+::: footer
+Data fra @jamesIntroductionStatisticalLearning2021.
+:::
+
+## Klassifikasjon
+
+::: incremental
+-   Kategorisk utfall $y_{i}$ for observasjoner $i=1,2,\dots,n$.
+-   Prediktorer $x_{1i}, x_{2i}, \dots, x_{pi}$ for observasjoner $i=1,2,\dots,n$.
+-   Hypotese, det finnes en sammenheng mellom sannsynligheten for utfall A og prediktorene, $$
+    P\left(y = A | x_{1},x_{2},\dots,x_{p}\right) = f_{A}\left(x_{1},x_{2},\dots,x_{p}\right).
+    $$
+-   Og utfall B og så videre, $$
+    P\left(y = B | x_{1},x_{2},\dots,x_{p}\right) = f_{B}\left(x_{1},x_{2},\dots,x_{p}\right).
+    $$
+:::
+
+## Semi-supervised learning
+
+-   Regresjon eller klassifikasjon, med delvis merkede data.
+
+![](figurer/semi-supervised.jpg){fig-align="center"}
+
+::: footer
+Figur fra [IBM](https://www.ibm.com/topics/semi-supervised-learning).
+:::
+
+## Unsupervised learning
+
+::: incremental
+-   Ingen utfall, kun prediktorer (billig!?).
+-   Prinsipalkomponenter, eksplorativ faktoranalyse, K-means.
+-   Collaborative filtering, independent component analysis, generativ KI, ++.
+:::
+
+## Collaborative filtering
+
+![](figurer/amazon-recommend.jpg){fig-align="center"}
+
+## Collaborative filtering
+
+![](figurer/collaborative-filtering.png){fig-align="center"}
+
+## Avviksdeteksjon
+
+![](figurer/anomaly-detection.webp){fig-align="center"}
+
+::: footer
+@barnettRelapsePredictionSchizophrenia2018, @hensonAnomalyDetectionPredict2021
+:::
+
+## Reinforcement learning
+
+![](figurer/reinforcement-learning.svg){fig-align="center"}
+
+## AlphaGo Zero
+
+![](figurer/alpha-go.webp){fig-align="center"}
+
+## AlphaGo Zero
+
+![](figurer/alpha-go-zero-figure3.webp){fig-align="center"}
+
+::: footer
+@silverMasteringGameGo2017
+:::
+
+## Kobling til statistikk?
+
+$$
+y = f(x_{1}, x_{2}, \dots, x_{p}) + \epsilon
+$$
+
+. . .
+
+$$
+y = \beta_{0} + \beta_{1} x_{1} + \beta_{2} x_{2} + \epsilon
+$$
+
+. . .
+
+:::::: incremental
+::::: columns
+::: column
+#### Statistikk
+
+-   Interaksjon?
+-   Konfidensintervall?
+-   P-verdier
+-   Diagnostikk
+:::
+
+::: column
+#### Maskinlæring
+
+-   Hvor nøyaktig predikeres nye data?
+-   Hastighet?
+-   Ikkelineære ledd?
+:::
+:::::
+::::::
+
+## Kobling til kunstig intelligens?
+
+::: {.incremental}
+
+- Målet med KI er å lage maskiner som kan 
+  - Resonnere, lære og agere på måter som vanligvis ville krevd menneskelig intelligens.
+  - Prosessere mye større datamengder enn mennesker.
+- KI lærer fra eksempler, ved hjelp av maskinlæring.
+
+:::
+
+
+## KI trenger treningsdata
+
+![](figurer/self-driving-labeled.jpg){fig-align="center"}
+
+::: {.notes}
+
+Maskinlæring brukes til å trene opp KI-en, men KI-systemet består av flere ting, for eksempel sikkerhetsmekanismer.
+:::
+
+# Supervised learning
+
+## Overordnet mål
+
+-   Å predikere best mulig på **nye** data.
+- Populasjon, utvalg, alt det der.
+
+
+::: {.notes}
+Tegn opp populasjon og utvalg.
+:::
+
+## Over- og undertilpasning {.smaller #sec-overtilpasning}
+
+```{r}
+set.seed(123)
+dat <- Carseats %>% 
+  mutate(id = row_number())
+
+trening <- dat %>% 
+  slice_sample(n = 80)
+
+validering <- dat %>% 
+  anti_join(trening, by = "id") %>% 
+  slice_sample(n = 80)
+
+test <- dat %>% 
+  anti_join(trening, by = "id") %>% 
+  anti_join(validering, by = "id") %>% 
+  slice_sample(n = 80)
+
+test$id <- validering$id <- trening$id <- NULL
+```
+
+::: panel-tabset
+
+### Data
+
+- Vi bruker igjen bilsete-dataene.
+- Nå delt inn i `trening` og `validering`.
+
+```{r, echo=TRUE}
+dim(trening)
+dim(validering)
+```
+
+::: footer
+Data fra [Seksjon @sec-barneseter].
+:::
+
+### Stor modell
+
+Alle hovedeffekter og toveisinteraksjoner:
+
+```{r, echo=TRUE}
+stor_modell <- lm(Sales ~ .^2, data = trening)
+summary(stor_modell)
+```
+
+
+### Mindre modell
+
+Signifikante hovedeffekter:
+
+```{r, echo=TRUE}
+mindre_modell <- lm(
+  Sales ~ CompPrice + Income + Advertising + Price + ShelveLoc + Age, 
+  data = trening)
+summary(mindre_modell)
+```
+
+### Prediksjon I
+
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Hvor godt treffer modellen på treningsdataene?
+
+```{r, echo=TRUE}
+pred_stor <- predict(stor_modell)
+pred_mindre <- predict(mindre_modell)
+fasit <- trening$Sales
+```
+
+Mean squared error, 
+
+$$
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^{2}
+$$
+
+```{r, echo=TRUE}
+(mse_stor <- mean((fasit - pred_stor)^2))
+(mse_mindre <- mean((fasit - pred_mindre)^2))
+```
+
+
+
+:::
+
+
+::: {.column width="50%"}
+
+```{r, fig.width=5}
+plot_dat <- tibble(
+  Sales = trening$Sales,
+  `Stor modell` = predict(stor_modell),
+  `Mindre modell` = predict(mindre_modell)
+) %>% 
+  pivot_longer(cols = -Sales, names_to = "Modell", values_to = "Prediksjon")
+
+ggplot(plot_dat, aes(x = Prediksjon, y = Sales, color = Modell)) + 
+  geom_point() + 
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(.25, .75),
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 18),
+    legend.title = element_text(size = 24),
+    legend.text = element_text(size = 18)
+  ) + 
+  labs(color = NULL)
+```
+
+:::
+
+
+::::
+
+
+
+### Prediksjon II
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Hvor godt treffer modellen på nye data?
+
+```{r, echo=TRUE}
+pred_stor <- predict(
+  stor_modell, newdata = validering)
+pred_mindre <- predict(
+  mindre_modell, newdata = validering)
+fasit <- validering$Sales
+```
+
+Mean squared error:
+
+```{r, echo=TRUE}
+(mse_stor <- mean((fasit - pred_stor)^2))
+(mse_mindre <- mean((fasit - pred_mindre)^2))
+```
+
+:::
+
+
+::: {.column width="50%"}
+
+```{r, fig.width=5}
+plot_dat <- tibble(
+  Sales = test$Sales,
+  `Stor modell` = predict(stor_modell, newdata = test),
+  `Mindre modell` = predict(mindre_modell, newdata = test)
+) %>% 
+  pivot_longer(cols = -Sales, names_to = "Modell", values_to = "Prediksjon")
+
+ggplot(plot_dat, aes(x = Prediksjon, y = Sales, color = Modell)) + 
+  geom_point() + 
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(.25, .75),
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 18),
+    legend.title = element_text(size = 24),
+    legend.text = element_text(size = 18)
+  ) + 
+  labs(color = NULL)
+```
+
+:::
+
+
+::::
+:::
+
+## Hva skjedde?
+
+Hver gang vi trekker et utvalg fra populasjonen, får vi både signal og støy.
+
+- Signalet er det samme hver gang.
+- Støyen er forskjellig hver gang.
+
+## Signal og støy
+
+::: {.panel-tabset}
+
+### Data
+
+```{r}
+set.seed(22)
+dat <- gamSim(n = 100, verbose = FALSE) %>% 
+  as_tibble() %>% 
+  rename(x = x2) %>% 
+  select(x, y)
+
+mod1 <- gam(y ~ s(x, k = 60, fx = TRUE), data = dat)
+mod2 <- gam(y ~ s(x), data = dat)
+mod3 <- gam(y ~ x, data = dat)
+
+plot_dat <- dat %>% 
+  mutate(
+    pred1 = predict(mod1),
+    pred2 = predict(mod2), 
+    pred3 = predict(mod3)
+  ) %>% 
+  pivot_longer(cols = starts_with("pred"))
+
+```
+
+```{r, fig.align='center'}
+p1 <- ggplot(plot_dat, aes(x = x, y = y)) + 
+  geom_point() + 
+  theme(
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 18),
+    legend.title = element_text(size = 24),
+    legend.text = element_text(size = 18)
+  )
+
+p1
+```
+
+
+### Modeller
+
+```{r}
+p2 <- p1 + 
+  geom_line(aes(x = x, y = value, group = name, color = name),
+            linewidth = 1) + 
+  theme(legend.position = "none")
+
+p2
+```
+
+
+### Nytt utvalg
+
+
+```{r}
+dat <- gamSim(n = 100, verbose = FALSE) %>% 
+  as_tibble() %>% 
+  rename(x = x2) %>% 
+  select(x, y)
+
+plot_dat <- dat %>% 
+  mutate(
+    pred1 = predict(mod1, newdata = .),
+    pred2 = predict(mod2, newdata = .), 
+    pred3 = predict(mod3, newdata = .)
+  ) %>% 
+  pivot_longer(cols = starts_with("pred"))
+
+ggplot(plot_dat, aes(x = x, y = y)) + 
+  geom_point() + 
+  theme(
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 18),
+    legend.title = element_text(size = 24),
+    legend.text = element_text(size = 18)
+  ) + 
+  geom_line(aes(x = x, y = value, group = name, color = name),
+            linewidth = 1) + 
+  theme(legend.position = "none")
+```
+
+
+
+::: 
+
+
+## Høy varians med fleksibel modell
+
+- Modell tilpasset 10 utvalg fra populasjonen. 
+- Sannheten (signalet) er den svarte streken.
+
+```{r, fig.width=6, fig.height=4, fig.align='center'}
+set.seed(123)
+f <- function(x) {
+  0.2 * x^11 * (10 * (1 - x))^6 + 10 * (10 * x)^3 * (1 - x)^10
+}
+
+grid <- tibble(x = seq(from = 0, to = 1, by = .01)) %>% 
+  mutate(y = f(x))
+
+sim <- map_dfr(1:10, function(i) {
+  dat <- tibble(x = runif(100)) %>% 
+    mutate(
+      y = f(x) + rnorm(nrow(.))
+    )
+  
+  mod1 <- gam(y ~ s(x, k = 60, fx = TRUE), data = dat)
+  
+  grid %>% 
+    mutate(
+      pred = predict(mod1, newdata = grid),
+      i = paste("Utvalg", i)
+    )
+})
+
+ggplot(sim, aes(x = x, y = pred, group = i)) + 
+  geom_line(alpha = .3) + 
+  geom_line(aes(y = y))
+
+```
+
+
+## Systematisk feil med lineær modell
+
+- Modell tilpasset 10 utvalg fra populasjonen. 
+- Sannheten (signalet) er den svarte streken.
+
+```{r, fig.width=6, fig.height=4, fig.align='center'}
+set.seed(123)
+f <- function(x) {
+  0.2 * x^11 * (10 * (1 - x))^6 + 10 * (10 * x)^3 * (1 - x)^10
+}
+
+grid <- tibble(x = seq(from = 0, to = 1, by = .01)) %>% 
+  mutate(y = f(x))
+
+sim <- map_dfr(1:10, function(i) {
+  dat <- tibble(x = runif(100)) %>% 
+    mutate(
+      y = f(x) + rnorm(nrow(.))
+    )
+  
+  mod1 <- gam(y ~ x, data = dat)
+  
+  grid %>% 
+    mutate(
+      pred = predict(mod1, newdata = grid),
+      i = paste("Utvalg", i)
+    )
+})
+
+ggplot(sim, aes(x = x, y = pred, group = i)) + 
+  geom_line(alpha = .3) + 
+  geom_line(aes(y = y))
+
+```
+
+
+## Den gyldne middelvei?
+
+- Modell tilpasset 10 utvalg fra populasjonen. 
+- Sannheten (signalet) er den svarte streken.
+
+```{r, fig.width=6, fig.height=4, fig.align='center'}
+set.seed(123)
+f <- function(x) {
+  0.2 * x^11 * (10 * (1 - x))^6 + 10 * (10 * x)^3 * (1 - x)^10
+}
+
+grid <- tibble(x = seq(from = 0, to = 1, by = .01)) %>% 
+  mutate(y = f(x))
+
+sim <- map_dfr(1:10, function(i) {
+  dat <- tibble(x = runif(100)) %>% 
+    mutate(
+      y = f(x) + rnorm(nrow(.))
+    )
+  
+  mod1 <- gam(y ~ s(x), data = dat)
+  
+  grid %>% 
+    mutate(
+      pred = predict(mod1, newdata = grid),
+      i = paste("Utvalg", i)
+    )
+})
+
+ggplot(sim, aes(x = x, y = pred, group = i)) + 
+  geom_line(alpha = .3) + 
+  geom_line(aes(y = y))
+
+```
+
+## Bias-variance tradeoff
+
+- Mean squared error til prediksjon på nye data kan skrives
+
+$$
+\text{MSE} = \text{Bias} + \text{Variance} + \sigma^{2}.
+$$
+
+## Bias-variance tradeoff
+
+![](figurer/bias-variance-tradeoff.svg){fig-align="center"}
+
+## Hvordan når vi optimumet?
+
+
+:::: {.columns}
+
+::: {.column width=40%}
+
+
+- Kontrollere modellens kompleksitet.
+- Regne ut MSE for hver kompleksitet.
+
+:::
+
+::: {.column width=60%}
+
+![](figurer/bias-variance-tradeoff.svg){fig-align="center"}
+
+:::
+
+::::
+
+
+
+## Regularisering {.smaller}
+
+::: {.panel-tabset}
+
+### Lineær regresjon
+
+:::{.incremental}
+
+- Modell: 
+$$y = \beta_{0} + \beta_{1}x_{1} + \beta_{2}x_{2} + \dots + \beta_{p}x_{p} + \epsilon.$$
+- Mål: finn $\hat{\beta} = (\hat{\beta}_{1}, \hat{\beta}_{2}, \dots, \hat{\beta}_{p})'$ som minimerer
+$$
+MSE = \sum_{i=1}^{n} \left\{y_{i} - (\beta_{0} + \beta_{1}x_{i1} + \beta_{2}x_{i2} + \dots + \beta_{p}x_{ip})\right\}^{2}.
+$$
+
+:::
+
+### Ridge
+
+::: {.incremental}
+- Modell: 
+$$y = \beta_{0} + \beta_{1}x_{1} + \beta_{2}x_{2} + \dots + \beta_{p}x_{p} + \epsilon.$$
+
+- Regel: 
+$$
+\hat{\beta}_{1}^{2} + \hat{\beta}_{2}^{2} + \dots + \hat{\beta}_{p}^{2} < \text{grense}.
+$$
+
+- Mål: blant $\hat{\beta}$ som tilfredsstiller regelen, finn en som minimerer
+$$
+MSE = \sum_{i=1}^{n} \left\{y_{i} - (\beta_{0} + \beta_{1}x_{i1} + \beta_{2}x_{i2} + \dots + \beta_{p}x_{ip})\right\}^{2}.
+$$
+
+:::
+
+### Lasso
+
+::: {.incremental}
+- Modell: 
+$$y = \beta_{0} + \beta_{1}x_{1} + \beta_{2}x_{2} + \dots + \beta_{p}x_{p} + \epsilon.$$
+
+- Regel: 
+$$
+|\hat{\beta}_{1}| + |\hat{\beta}_{2}| + \dots + |\hat{\beta}_{p}| < \text{grense}.
+$$
+
+- Mål: blant $\hat{\beta}$ som tilfredsstiller regelen, finn en som minimerer
+$$
+MSE = \sum_{i=1}^{n} \left\{y_{i} - (\beta_{0} + \beta_{1}x_{i1} + \beta_{2}x_{i2} + \dots + \beta_{p}x_{ip})\right\}^{2}.
+$$
+
+
+
+:::
+
+:::
+
+## Regularisering
+
+::: {.incremental}
+
+- Lineær regresjon: $\hat{\beta}_{1}, \hat{\beta}_{2}, \dots, \hat{\beta}_{p}$ helt fri.
+
+- Ridge-regresjon: 
+$$
+\hat{\beta}_{1}^{2} + \hat{\beta}_{2}^{2} + \dots + \hat{\beta}_{p}^{2} < \text{grense}.
+$$
+
+- Lasso-regresjon:
+$$
+|\hat{\beta}_{1}| + |\hat{\beta}_{2}| + \dots + |\hat{\beta}_{p}| < \text{grense}.
+$$
+
+:::
+
+## Regularisering
+
+![](figurer/lasso-ridge.png){fig-align="center"}
+
+- Hvordan setter vi den øvre grensen?
+
+## Trening-, validering- og testsett
+
+Målet:
+
+- Best mulig prediksjon på nye data, men hvordan??
+
+
+## Det vi har
+
+![](figurer/populasjon1.jpg){fig-align="center"}
+
+## Det vi vil
+
+![](figurer/populasjon2.jpg){fig-align="center"}
+
+## Det vi vil
+
+![](figurer/populasjon3.jpg){fig-align="center"}
+
+## Det vi kan
+
+![](figurer/populasjon4.jpg){fig-align="center"}
+
+
+## Trening, validering og test
+
+```{r}
+Xtrening <- model.matrix(Sales ~ .^2, data = trening)
+ytrening <- trening$Sales
+mod <- glmnet(Xtrening, ytrening, alpha = 0)
+
+pred_trening <- predict(mod, newx = Xtrening)
+Xvalidering <- model.matrix(Sales ~ .^2, data = validering)
+yvalidering <- validering$Sales
+pred_validering <- predict(mod, newx = Xvalidering)
+
+rmse_trening <- apply(pred_trening, 2, function(x) {
+  sqrt(mean((ytrening - x)^2))
+})
+
+rmse_validering <- apply(pred_validering, 2, function(x) {
+  sqrt(mean((yvalidering - x)^2))
+})
+
+tau <- apply(mod$beta, 2, function(x) sum(x^2))
+
+Xtest <- model.matrix(Sales ~ .^2, data = test)
+ytest <- test$Sales
+tau_min <- tau[which.min(rmse_validering)]
+rmse_test <- sqrt(mean((ytest - predict(mod, newx = Xtest, s = tau_min))^2))
+
+plot_dat <- tibble(
+  grense = tau,
+  Trening = rmse_trening,
+  Validering = rmse_validering
+) %>% 
+  pivot_longer(cols = c("Trening", "Validering"), values_to = "RMSE") %>% 
+  bind_rows(
+    tibble(grense = tau_min, name = "Test", RMSE = rmse_test)
+  ) %>% 
+  mutate(
+    name = factor(name, levels = c("Trening", "Validering", "Test"))
+  )
+
+```
+
+
+::: {.panel-tabset}
+
+### Bilsetesalg
+
+Fortsatt lineær modell med alle toveisinteraksjoner:
+
+```{r, echo=TRUE, eval=FALSE}
+lm(Sales ~ .^2, data = trening)
+```
+
+Men vi krever
+
+$$
+\hat{\beta}_{1}^{2} + \hat{\beta}_{2}^{2} + \dots + \hat{\beta}_{p}^{2} < \text{grense}.
+$$
+
+### Trening
+
+```{r, fig.height=4, fig.width=4, fig.align='center'}
+plot_dat %>% filter(name == "Trening") %>% 
+  ggplot(aes(x = grense, y = RMSE, group = name, color = name)) + 
+  geom_line() + 
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(.6, .7)
+    ) + 
+  labs(color = NULL)
+```
+
+
+### Validering
+
+```{r, fig.height=4, fig.width=4, fig.align='center'}
+plot_dat %>% 
+  filter(name != "Test") %>% 
+  ggplot(aes(x = grense, y = RMSE, group = name, color = name)) + 
+  geom_line() + 
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(.6, .7)
+    ) + 
+  labs(color = NULL)
+```
+
+
+### Test
+
+```{r, fig.height=4, fig.width=4, fig.align='center'}
+plot_dat %>% 
+  filter(name != "Test") %>% 
+  ggplot(aes(x = grense, y = RMSE, group = name, color = name)) + 
+  geom_line() + 
+  geom_point(data = filter(plot_dat, name == "Test")) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(.6, .7)
+    ) + 
+  labs(color = NULL)
+```
+
+:::
+
+## Et lite problem
+
+- Vi kan få ganske andre svar om vi deler inn trening/validering/test tilfeldig på nytt.
+
+![](figurer/populasjon4.jpg){fig-align="center"}
+
+## Kryssvalidering
+
+![](figurer/loocv.jpg){fig-align="center"}
+
+## Kryssvalidering
+
+![](figurer/kfold.jpg){fig-align="center"}
+
+## Kryssvalidering
+
+![](figurer/populasjon5.jpg){fig-align="center"}
+
+## Kryssvalidering
+
+```{r}
+trening <- rbind(trening, validering)
+```
+
+
+```{r echo=TRUE, fig.align='center', fig.width=6, eval=FALSE}
+#| code-line-numbers: 1|2|3|4|5
+library(glmnet)
+X <- model.matrix(Sales ~ .^2, data = trening)
+y <- trening$Sales
+mod <- cv.glmnet(X, y)
+plot(mod)
+```
+
+
+## Oppgave 1
+
+Gå til [https://osorensen.github.io/ml-kurs-2024/](https://osorensen.github.io/ml-kurs-2024/) eller skann koden.
+
+![](figurer/qr-kode.png){width="200" fig-align="center"}
+
+# Trebaserte metoder
+
+## Trebaserte metoder
+
+- Lasso og ridge sliter med ikkelineære effekter og interaksjoner.
+- Kan vi lage metoder som lærer sånt selv?
+
+## Regresjonstrær {.smaller}
+
+::: panel-tabset
+
+### Data
+
+- Kan vi predikere lønna til baseballspillere?
+
+```{r}
+library(ISLR2)
+Hitters %>% 
+  as_tibble() %>%
+  head(10) %>% 
+  knitr::kable()
+```
+
+
+### Regresjonstre
+
+```{r,echo=TRUE}
+library(tree)
+tree_mod <- tree(Salary ~ ., data = Hitters)
+```
+
+```{r}
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+### Prediksjon
+
+- Hva er predikert lønn for en spiller med `CHits = 448`, `AtBat = 200` og `CRBI = 110`?
+- Hvor mange predikerte verdier er mulig?
+
+```{r}
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+
+:::
+
+## Trær er "trinnfunksjoner"
+
+![](figurer/ISL_Fig8_3.jpg){fig-align="center"}
+
+
+## Klassifikasjonstrær {.smaller}
+
+::: panel-tabset
+
+### Data
+
+```{r}
+Heart <- read.csv("https://www.statlearning.com/s/Heart.csv")
+Heart$X <- NULL
+Heart$AHD <- factor(Heart$AHD)
+Heart <- na.omit(Heart)
+Heart %>% 
+  as_tibble() %>% 
+  head(10) %>% 
+  knitr::kable()
+```
+
+
+### Predikere hjertesykdom
+
+```{r, echo=TRUE}
+tree_mod <- tree(AHD ~ ., data = Heart)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+
+:::
+
+## Problemet med trær
+
+:::: {.columns}
+
+::: {.column}
+
+::: {.incremental}
+- Dårlige til å predikere.
+- Små endringer i data kan gi store endringer i treet.
+:::
+
+:::
+
+::: {.column}
+![](figurer/trær.jpg)
+:::
+
+::::
+
+## Bruk heller en skog!
+
+![](figurer/skog.jpg){fig-align="center"}
+
+## Ensemble-metoder
+
+- *Weak learners*: trær
+- Ensembler (skoger) med trær blir *strong learners*
+
+
+## Trær
+
+- Ett tre er en estimert funksjon $\hat{f}(x)$.
+
+```{r}
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+
+## Bagging {.smaller}
+
+::: panel-tabset
+
+### Ideelt
+
+Skulle hatt $B$ treningsdatasett, tilpasset ett tre til hver, og tatt gjennomsnittet:
+
+$$
+\hat{f}_{avg}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{f}^{b}(x).
+$$
+
+### Bagging
+
+- Trekk $B$ datasett fra treningssettet, med tilbakelegging, og tilpass et tre $\hat{f}^{*b}(x)$ til hver.
+
+
+$$
+\hat{f}_{bag}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{f}^{*b}(x).
+$$
+
+- For klassifiseringsproblemer lar vi flertallet bestemme (majority vote).
+- Observasjonene vi ikke trakk, blir testdata.
+
+
+### Eksempel I
+
+```{webr-r}
+library(ISLR2)
+in_bag <- sample(nrow(Hitters), replace = TRUE)
+out_of_bag <- setdiff(1:nrow(Hitters), in_bag)
+
+treningsdata <- Hitters[in_bag, ]
+testdata <- Hitters[out_of_bag, ]
+```
+
+### Eksempel II
+
+```{webr-r}
+in_bag <- sample(nrow(Hitters), replace = TRUE)
+out_of_bag <- setdiff(1:nrow(Hitters), in_bag)
+treningsdata <- Hitters[in_bag, ]
+
+library(tree)
+tree_mod <- tree(Salary ~ ., data = treningsdata)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+
+:::
+
+## Random forest
+
+I tillegg til bagging får treet bare se et tilfeldig utvalg av prediktorene hver gang en gren skal lages.
+
+```{r, fig.align='center'}
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+## Random forest
+
+- Predikere hjertesykdom:
+
+```{r, echo=TRUE}
+library(randomForest)
+mod <- randomForest(
+  formula = AHD ~ ., data = Heart, importance = TRUE
+)
+```
+
+## Out-of-bag error
+
+[Falske positive]{style="color:red;"}, [klassifiseringsfeil]{style="color:black;"}, [falske negative]{style="color:green"}.
+
+```{r, echo=TRUE, fig.align='center'}
+plot(mod)
+```
+
+## Variable importance
+
+```{r, echo=TRUE}
+varImpPlot(mod)
+```
+
+
+
+## Boosting
+
+- Random forest bruker $B$ uavhengige trær.
+- Boosting lager trærne inkrementelt. Hvert nytt tre tilpasses tilpasses residualet fra de eksisterende.
+
+## Boosting-algoritmen
+
+::: {.incremental}
+
+- Start med ingenting, $\hat{f}(x) = 0$. Da blir residualet $r_{i} = y_{i}$ for alle observasjoner.
+- For $b=1,2,\dots,B$, gjenta:
+  - Tilpass et tre $\hat{f}^{b}(x)$ med residualet som responsvariabel.
+  - Oppdater estimatet: $\hat{f}(x) \gets \hat{f}(x) + \lambda \hat{f}^{b}(x)$.
+  - Oppdater residualet: $r_{i} \gets r_{i} - \lambda \hat{f}^{b}(x)$.
+- Til slutt har vi modellen $\hat{f}(x) = \sum_{b=1}^{B} \lambda \hat{f}^{b}(x)$.
+:::
+
+## Boosting
+
+- Hvert tre er **lite**.
+- Læringsraten $\lambda$ er den viktigste regulariserings-parameteren.
+- Best med lav læringsrate $(\lambda \approx 0.001)$ og mange trær $(B \approx 10000)$.
+
+
+## Boosting i R
+
+Pakken `xgboost` har den mest effektive implementeringen.
+
+```{r, eval=TRUE}
+music_trening <- readRDS("data/music_trening.rds")
+```
+
+
+```{r, echo=TRUE}
+#| code-line-numbers: 2|3|6|7|8|1-10
+library(xgboost)
+X <- model.matrix(Depression ~ ., data = music_trening)
+y <- music_trening$Depression
+
+mod <- xgboost(
+  data = X, label = y, verbose = FALSE,
+  nrounds = 100, 
+  objective = "reg:squarederror"
+  )
+```
+
+
+## Hvilke variabler er viktigst?
+
+```{r, echo=TRUE, fig.align='center'}
+importance_matrix <- xgb.importance(colnames(X), model = mod)
+xgb.plot.importance(importance_matrix, top_n = 12)
+```
+
+
+## Oppgave 2
+
+Gå til [https://osorensen.github.io/ml-kurs-2024/](https://osorensen.github.io/ml-kurs-2024/) eller skann koden.
+
+![](figurer/qr-kode.png){width="200" fig-align="center"}
+
+
+# Chatbots og språkmodeller
+
+# Deep learning
+
+
+## Tabulære data {.smaller}
+
+. . .
+
+```{r}
+music_trening %>%
+  select(1:6) %>% 
+  head(6) %>% 
+  knitr::kable()
+```
+
+
+## Bildedata {.smaller}
+
+![](figurer/mri.jpg){fig-align="center"}
+
+## Tekstdata
+
+Data brukt til å trene GPT-3:
+
+![](figurer/tekstdata.jpg){width="300"}
+
+
+::: footer
+
+@brownLanguageModelsAre2020
+
+:::
+
+## Deep learning
+
+- Transformerer rådata gjennom **mange** ikkelineære funksjoner.
+- Dype nevrale nettverk.
+
+## Enkle nevrale nettverk
+
+![](figurer/ISL_Fig10_1.jpg){fig-align="center"}
+
+$$
+A_{k} = h_{k}(X) = g\left(w_{k0} + \sum_{j=1}^{p}w_{kj} X_{j}\right)
+$$
+
+## Dype nevrale nettverk
+
+![](figurer/Leonardsen2022_architecture.jpg){fig-align="center"}
+
+::: footer
+
+@leonardsenDeepNeuralNetworks2022
+
+:::
+
+
+## Mange parametre
+
+![](figurer/Leonardsen2023_parameters.jpg){fig-align="center"}
+
+::: footer
+
+@leonardsenConstructingPersonalizedCharacterizations2024
+
+:::
+
+## Språkmodeller
+
+- Deep learning
+- Trent på hele internett, bøker, aviser ++
+- Mange milliarder parametre
+
+
+## Språkmodeller
+
+> Q: "Hva er det beste med kunstig intelligens?"
+
+. . .
+
+- $P(\text{ord1} | Q)$
+
+```{r}
+tibble(
+  ord1 = c("Kunstig", "Det"),
+  prob = c(.6, .4)
+) %>% 
+  knitr::kable()
+```
+
+. . .
+
+Anta `ord1 = "Kunstig"`.
+
+## Språkmodeller
+
+> Q: "Hva er det beste med kunstig intelligens?"
+
+. . .
+
+- $P(\text{ord2} | \text{ord1="Kunstig"}, Q)$
+
+```{r}
+tibble(
+  ord2 = c("intelligens", "åndedrett", "kne"),
+  prob = c(.999, .005, .005)
+) %>% 
+  knitr::kable()
+```
+
+. . .
+
+Anta `ord2 = "intelligens"`.
+
+## Språkmodeller
+
+> Q: "Hva er det beste med kunstig intelligens?"
+
+. . .
+
+- $P(\text{ord3} | \text{ord1="Kunstig"}, \text{ord2="intelligens"}, Q)$
+
+```{r}
+tibble(
+  ord3 = c("(KI)", "er", "har"),
+  prob = c(.3, .5, .2)
+) %>% 
+  knitr::kable()
+```
+
+. . . 
+
+Og så videre.
+
+::: footer
+
+Eksemplet er inspirert av [Stephen Wolfram](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/){preview-link="true"}.
+
+:::
+
+## Deep learning i praksis
+
+- [Keras](https://keras3.posit.co/){preview-link="true"}
+- Grafikkort (GPU-er)
+- [Transfer learning](https://keras.io/api/applications/){preview-link="true"}
+
+# Bruk av språkmodeller
+
+## Bruk av generativ KI klinisk
+
+Relevante referanser?
+
+- @sezginBehavioralHealthGenerative2024
+- @minerComputationalApproachMeasure2022
+
+
+## Referanser
+
+

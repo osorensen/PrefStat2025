@@ -1,0 +1,6 @@
+"0","cl <- makeCluster(4)"
+"0","mod <- compute_mallows("
+"0","  data = setup_rank_data(rankings = potato_visual), "
+"0","  compute_options = set_compute_options(nmc = 300), "
+"0","  cl = cl)"
+"0","stopCluster(cl)"

@@ -1,0 +1,4 @@
+"0","mod <- compute_mallows("
+"0","  data = setup_rank_data(rankings = sushi_rankings),"
+"0","  model_options = set_model_options(n_clusters = 5)"
+"0",")"

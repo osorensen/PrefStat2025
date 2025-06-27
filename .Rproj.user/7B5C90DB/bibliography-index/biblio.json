@@ -1,0 +1,161 @@
+{
+    "sources": [
+        {
+            "ISSN": "1932-6157",
+            "abstract": "We are interested in learning how listeners perceive sounds as having human origins. An experiment was performed with a series of electronically synthesized sounds, and listeners were asked to compare them in pairs. We propose a Bayesian probabilistic method to learn individual preferences from nontransitive pairwise comparison data, as happens when one (or more) individual preferences in the data contradicts what is implied by the others. We build a Bayesian Mallows model in order to handle nontransitive data, with a latent layer of uncertainty which captures the generation of preference misreporting. We then develop a mixture extension of the Mallows model, able to learn individual preferences in a heterogeneous population. The results of our analysis of the musicology experiment are of interest to electroacoustic composers and sound designers, and to the audio industry in general, whose aim is to understand how computer generated sounds can be produced in order to sound more human.",
+            "author": [
+                {
+                    "family": "Crispino",
+                    "given": "Marta"
+                },
+                {
+                    "family": "Arjas",
+                    "given": "Elja"
+                },
+                {
+                    "family": "Vitelli",
+                    "given": "Valeria"
+                },
+                {
+                    "family": "Barrett",
+                    "given": "Natasha"
+                },
+                {
+                    "family": "Frigessi",
+                    "given": "Arnoldo"
+                }
+            ],
+            "container-title": "The Annals of Applied Statistics",
+            "id": "crispinoBayesianMallowsApproach2019",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "page": "492-519",
+            "publisher": "Institute of Mathematical Statistics",
+            "title": "A Bayesian Mallows Approach to Nontransitive Pair Comparison Data: How Human Are Sounds?",
+            "title-short": "A Bayesian Mallows Approach to Nontransitive Pair Comparison Data",
+            "type": "article-journal",
+            "volume": "13"
+        },
+        {
+            "DOI": "10.1007/s11222-023-10266-8",
+            "ISSN": "1573-1375",
+            "abstract": "The Mallows model (MM) occupies a central role in parametric modelling of ranking data to learn preferences of a population of judges. Despite the wide range of metrics for rankings that can be considered in the model specification, the choice is typically limited to the Kendall, Cayley or Hamming distances, due to the closed-form expression of the related model normalizing constant. This work instead focuses on the Mallows model with Spearman distance (MMS). A novel approximation of the normalizing constant is introduced to allow inference even with a large number of items. This allows us to develop and implement an efficient and accurate EM algorithm for estimating finite mixtures of MMS aimed at i) enlarging the applicability to samples drawn from heterogeneous populations, and ii) dealing with partial rankings affected by diverse forms of censoring. These novelties encompass the critical inferential steps that traditionally limited the use of this distance in practice, and render the MMS comparable (or even preferable) to the MMs with other metrics in terms of computational burden. The inferential ability of the EM scheme and the effectiveness of the approximation are assessed by extensive simulation studies. Finally, we show that the application to three real-world datasets endorses our proposals also in the comparison with competing mixtures of ranking models.",
+            "author": [
+                {
+                    "family": "Crispino",
+                    "given": "Marta"
+                },
+                {
+                    "family": "Mollica",
+                    "given": "Cristina"
+                },
+                {
+                    "family": "Astuti",
+                    "given": "Valerio"
+                },
+                {
+                    "family": "Tardella",
+                    "given": "Luca"
+                }
+            ],
+            "container-title": "Statistics and Computing",
+            "id": "crispinoEfficientAccurateInference2023",
+            "issue": "5",
+            "issued": {
+                "date-parts": [
+                    [
+                        2023,
+                        7
+                    ]
+                ]
+            },
+            "keyword": "Censoring,Distance-based models,EM algorithm,Model-based clustering,Ranking data",
+            "language": "en-US",
+            "page": "98",
+            "title": "Efficient and accurate inference for mixtures of Mallows models with Spearman distance",
+            "type": "article-journal",
+            "volume": "33"
+        },
+        {
+            "DOI": "10.1214/22-BA1307",
+            "ISSN": "1936-0975, 1931-6690",
+            "abstract": "The aim of this work is to study the problem of prior elicitation for the consensus ranking in the Mallows model with Spearman’s distance, a popular distance-based model for rankings or permutation data. Previous Bayesian inference for such a model has been limited to the use of the uniform prior over the space of permutations. We present a novel strategy to elicit informative prior beliefs on the location parameter of the model, discussing the interpretation of hyper-parameters and the implication of prior choices for the posterior analysis.",
+            "author": [
+                {
+                    "family": "Crispino",
+                    "given": "Marta"
+                },
+                {
+                    "family": "Antoniano-Villalobos",
+                    "given": "Isadora"
+                }
+            ],
+            "container-title": "Bayesian Analysis",
+            "id": "crispinoInformativePriorsConsensus2023",
+            "issue": "2",
+            "issued": {
+                "date-parts": [
+                    [
+                        2023,
+                        6
+                    ]
+                ]
+            },
+            "keyword": "62F07,62F15,Bayesian subjective inference,conjugate priors,Mallows model for rankings,permutations,permutohedron,Ranking data",
+            "page": "391-414",
+            "publisher": "International Society for Bayesian Analysis",
+            "title": "Informative Priors for the Consensus Ranking in the Bayesian Mallows Model",
+            "type": "article-journal",
+            "volume": "18"
+        },
+        {
+            "ISSN": "1532-4435",
+            "abstract": "Ranking and comparing items is crucial for collecting information about preferences in many areas, from marketing to politics. The Mallows rank model is among the most successful approaches to analyze rank data, but its computational complexity has limited its use to a particular form based on Kendall distance. We develop new computationally tractable methods for Bayesian inference in Mallows models that work with any right-invariant distance. Our method performs inference on the consensus ranking of the items, also when based on partial rankings, such as top-k items or pairwise comparisons. We prove that items that none of the assessors has ranked do not inuence the maximum a posteriori consensus ranking, and can therefore be ignored. When assessors are many or heterogeneous, we propose a mixture model for clustering them in homogeneous subgroups, with cluster-specific consensus rankings. We develop approximate stochastic algorithms that allow a fully probabilistic analysis, leading to coherent quantifications of uncertainties. We make probabilistic predictions on the class membership of assessors based on their ranking of just some items, and predict missing individual preferences, as needed in recommendation systems. We test our approach using several experimental and benchmark data sets.",
+            "author": [
+                {
+                    "family": "Vitelli",
+                    "given": "Valeria"
+                },
+                {
+                    "family": "Sørensen",
+                    "given": "Øystein"
+                },
+                {
+                    "family": "Crispino",
+                    "given": "Marta"
+                },
+                {
+                    "family": "Frigessi",
+                    "given": "Arnoldo"
+                },
+                {
+                    "family": "Arjas",
+                    "given": "Elja"
+                }
+            ],
+            "container-title": "The Journal of Machine Learning Research",
+            "id": "vitelliProbabilisticPreferenceLearning2017",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2017,
+                        1
+                    ]
+                ]
+            },
+            "keyword": "incomplete rankings,Markov chain monte carlo,pairwise comparisons,preference learning with uncertainty,recommendation systems",
+            "page": "5796-5844",
+            "title": "Probabilistic preference learning with the mallows rank model",
+            "type": "article-journal",
+            "volume": "18"
+        }
+    ],
+    "project_biblios": []
+}
