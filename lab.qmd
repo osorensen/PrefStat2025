@@ -1,0 +1,150 @@
+---
+title: "BayesMallows lab"
+author: "Øystein Sørensen"
+format: 
+  html:
+    toc: true
+    toc-location: 'left'
+editor: source
+bibliography: references.bib
+---
+
+## Preliminaries
+
+Start by making sure you have the most recent version of `BayesMallows` installed.
+
+```{r}
+library("BayesMallows")
+packageVersion("BayesMallows")
+```
+
+If not, do `install.packages("BayesMallows")`.
+
+The tidyverse is also a good thing to have, unless you're really good at data manipulation in base R.
+
+```{r}
+library(tidyverse)
+```
+
+
+## Complete data
+
+We start with analyzing the potato datasets.
+
+### Step 1
+
+Take a look at the datasets `potato_visual`, `potato_weighing`, and `potato_true_ranking` and make sure you understand what the rows and columns are. These datasets also have their own documentation pages, which you might look at.
+
+### Step 2
+
+Run 5000 iterations of Metropolis-Hastings for the Bayesian Mallows with the `potato_weighing` data. Use some other distance function than the default footrule. 
+
+The following may be useful:
+
+- The first example in the documentation of `compute_mallows`.
+- The documentation to `set_model_options`.
+- The documentation to `set_compute_options`.
+
+### Step 3
+
+Assess the convergence of the Metropolis-Hastings algorithm from step 2. Do you need to run more iterations to get a sufficient post-burnin sample size? If so, do this, and then set the burnin using the `burnin` function.
+
+The following functions may be useful:
+
+- `assess_convergence`
+- `burnin<-`
+
+### Step 4
+
+For the model you chose, plot the posterior histograms for the rankings of potatoes 5, 6, 7, and 8.
+
+It may be useful to read the documentation to `plot.BayesMallows`. Note that this function uses method dispatch and should be called via `plot(model_name)`, and **not** `plot.BayesMallows(model_name)`.
+
+## Preference data
+
+### Step 1
+
+- Read Section 6.2 in @vitelliProbabilisticPreferenceLearning2017 to get an overview of the beach dataset.
+- Take a look at the `beach_preferences` dataframe.
+
+### Step 2
+
+- Run 5000 iterations of Metropolis-Hastings for the Bayesian Mallows model using the beach preference dataset. 
+- Use whichever distance you like.
+- In `set_compute_options`, make sure to specify that the augmented data should be saved.
+
+### Step 3
+
+Below you can see the rankings involving beach 2 and 4 for assessors 1 and 2.
+
+```{r}
+beach_preferences %>% 
+  filter(assessor %in% c(1, 2), 
+         bottom_item %in% c(2, 4) | top_item %in% c(2, 4))
+```
+
+- Is there an implied order between beach 2 and 4 for assessor 1?
+- Is there an implied order between beach 2 and 4 for assessor 2?
+
+### Step 4
+
+Call the `assess_convergence` function on the model you just computed, specifying the arguments `parameter = "Rtilde"`, `items = c(2, 4)` and `assessors = c(1, 2)`. See the function documentation if necessary.
+
+- Do the trace plots agree with your answers to the two questions in step 3?
+
+### Step 5
+
+Inspect some other traceplots using `assess_convergence`:
+
+- What is the right burnin?
+- Do you need to run more iterations to get a decent post-burnin sample?
+
+Get a model which you're happy with, and set the burnin using the `burnin<-` function.
+
+### Step 6
+
+- Visualize the posterior distributions of $\alpha$ and $\rho$ using the `plot` function.
+
+### Step 7
+
+- Read the documentation for `plot_top_k`, including the examples.
+- Use the `plot_top_k` function to visualize each item's probability of being ranked among the top-4 for each assessor. 
+- Also try the `predict_top_k` function, which gives you the results as a dataframe.
+
+## Mixture modeling
+
+### Step 1
+
+Read the documentation to the `compute_mallows_mixtures` function, so you understand how it differs from the `compute_mallows` function.
+
+### Step 2
+
+Figure out how many cores you have with the following command:
+
+```{r, eval=FALSE}
+library(parallel)
+detectCores()
+```
+
+
+- Try to cluster to 5000 assessors in the `sushi_rankings` dataset. 
+- Use `compute_mallows_mixtures` to try out different numbers of clusters $C$. See the examples in the function documentation for help. In particular, create a compute cluster (something completely different, with the same name), using `makeCluster(5)` or some other appropriate number.
+- Make sure to set `include_wcd = TRUE` in `set_compute_options`.
+
+### Step 3
+
+- Assess convergence for the models that came out of `compute_mallows_mixtures` above. Set the burnin using `burnin<-`.
+- Create an elbow plot using `plot_elbow` and decide on the number of clusters necessary.
+
+### Step 4
+
+- In step 3 you decided upon the final value of $C$, based on the elbow plot. Now compute a single Bayesian Mallows model with this value of $C$ provided in `set_model_options`.
+- Inspect the trace plots with `assess_convergence`, decide upon the appropriate burnin value and number of iterations, and set the burnin using `burnin<-`.
+
+### Step 5
+
+Use the `plot` function with argument `parameter = "cluster_assignment"` to predict the cluster assignment of each individual.
+
+### Step 6 (bonus question)
+
+Label switching is a serious issue in mixture modeling. In the last example in the documentation of `compute_mallows`, we outline how to check for label switching. Go through this example, and check if label switching seem to be an issue in your model.

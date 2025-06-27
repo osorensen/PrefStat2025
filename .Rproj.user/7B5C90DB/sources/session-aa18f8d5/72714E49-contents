@@ -1,7 +1,0 @@
-project:
-  title: "PrefStat2025"
-
-webr:
-  packages: ['tidyverse', 'parallel', 'BayesMallows', 'combinat']
-  autoload-packages: true
-
