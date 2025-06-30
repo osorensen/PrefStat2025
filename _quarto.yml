@@ -2,6 +2,6 @@ project:
   title: "PrefStat2025"
 
 webr:
-  packages: ['tidyverse', 'parallel', 'BayesMallows', 'combinat']
+  packages: ['tidyverse', 'parallel', 'BayesMallows', 'combinat', 'e1071']
   autoload-packages: true
 

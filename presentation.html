@@ -484,7 +484,7 @@
   // Document level settings ----
 
   // Determine if we need to install R packages
-  globalThis.qwebrInstallRPackagesList = ['tidyverse', 'parallel', 'BayesMallows', 'combinat'];
+  globalThis.qwebrInstallRPackagesList = ['tidyverse', 'parallel', 'BayesMallows', 'combinat', 'e1071'];
 
   // Specify possible locations to search for the repository
   globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
@@ -506,7 +506,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"code":"set.seed(12)\nsample_mallows(rho0 = 1:5, alpha0 = 2, n_samples = 4)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"combinat::permn(1:3)","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"prefs <- data.frame(\n  assessor = 1, bottom_item = c(2, 3), top_item = c(1, 2))\nget_transitive_closure(\n  setup_rank_data(preferences = prefs, n_items = 4))","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"beach_preferences","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"beach_data <- setup_rank_data(preferences = beach_preferences)\nget_transitive_closure(beach_data)","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"mod <- compute_mallows(\n  data = beach_data,\n  compute_options = set_compute_options(save_aug = TRUE)\n)\nassess_convergence(mod)\nassess_convergence(mod, parameter = \"rho\")\nassess_convergence(mod, parameter = \"Rtilde\")","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"mod <- compute_mallows(\n  data = setup_rank_data(preferences = beach_preferences),\n  compute_options = set_compute_options(nmc = 5000, save_aug = TRUE)\n)\nburnin(mod) <- 2500\ncompute_consensus(mod)\nplot_top_k(mod, k = 3)","id":7,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-7","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"sushi_rankings","id":8,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-8","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"prefs <- data.frame(\n  assessor = 1, bottom_item = c(1, 2, 3), top_item = c(2, 3, 1)\n)\nprepared <- setup_rank_data(preferences = prefs)\nget_transitive_closure(prepared)","id":9,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-9","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qwebrCellDetails = [{"code":"set.seed(12)\nsample_mallows(rho0 = 1:5, alpha0 = 2, n_samples = 4)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"permutations(3) # from e1071 package","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"prefs <- data.frame(\n  assessor = 1, bottom_item = c(2, 3), top_item = c(1, 2))\nget_transitive_closure(\n  setup_rank_data(preferences = prefs, n_items = 4))","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"head(beach_preferences)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"beach_data <- setup_rank_data(preferences = beach_preferences)\nget_transitive_closure(beach_data)","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"mod <- compute_mallows(\n  data = beach_data,\n  compute_options = set_compute_options(nmc = 3, save_aug = TRUE)\n)\nassess_convergence(mod)\nassess_convergence(mod, parameter = \"rho\")\nassess_convergence(mod, parameter = \"Rtilde\")","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"mod <- compute_mallows(\n  data = setup_rank_data(preferences = beach_preferences),\n  compute_options = set_compute_options(nmc = 3, save_aug = TRUE)\n)\nburnin(mod) <- 2\ncompute_consensus(mod)\nplot_top_k(mod, k = 3)","id":7,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-7","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"head(sushi_rankings)","id":8,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-8","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"prefs <- data.frame(\n  assessor = 1, bottom_item = c(1, 2, 3), top_item = c(2, 3, 1)\n)\nprepared <- setup_rank_data(preferences = prefs)\nget_transitive_closure(prepared)","id":9,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-9","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"dat <- setup_rank_data(preferences = sounds)\nget_transitive_closure(dat)","id":10,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
   </script>
   <script type="module">
@@ -2076,7 +2076,8 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <span id="cb1-2"><a href=""></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span>
 <span id="cb1-3"><a href=""></a><span class="fu">theme_update</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
 <span id="cb1-4"><a href=""></a><span class="fu">library</span>(BayesMallows)</span>
-<span id="cb1-5"><a href=""></a><span class="fu">library</span>(parallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href=""></a><span class="fu">library</span>(parallel)</span>
+<span id="cb1-6"><a href=""></a><span class="fu">library</span>(e1071)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section>
@@ -2088,9 +2089,9 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <h2>Data-generating distribution</h2>
 <p>Ranking <span class="math inline">\(r\)</span> generated by</p>
 <p><span class="math display">\[
-p\left(r | \theta\right) = \frac{\exp\left\{ - \left(\alpha /m\right) d\left(r, \rho\right)\right\}}{Z\left(\alpha \right)}
+p\left(r | \alpha, \rho\right) = \frac{\exp\left\{ - \left(\alpha /m\right) d\left(r, \rho\right)\right\}}{Z\left(\alpha \right)}
 \]</span></p>
-<p>with support <span class="math inline">\(\mathcal{P}_{m}\)</span> and <span class="math inline">\(\theta = \{\alpha, \rho\}\)</span>.</p>
+<p>with support <span class="math inline">\(\mathcal{P}_{m}\)</span>.</p>
 </section>
 <section id="data-generating-distribution-1" class="slide level2">
 <h2>Data-generating distribution</h2>
@@ -2187,7 +2188,7 @@ A\left(\theta', \theta_{t}\right) = \text{min}\left\{1, \frac{p(\theta')}{p(\the
 <ul>
 <li class="fragment">Parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\rho\)</span> can be dealt with one at a time.</li>
 <li class="fragment">Acceptance probability <span class="math inline">\(A(\rho',\rho_{t})\)</span> for proposal <span class="math inline">\(\rho'\)</span>: <span class="math display">\[
-\text{min}\left\{1, \exp\left\{-\left(\alpha_{t}/m\right) \left[d\left(r_{i},\rho'\right) - d\left(r_{i},\rho_{t}\right)\right]\right\} \frac{g\left(\rho_{t}|\rho'\right)}{g\left(\rho'|\rho_{t}\right)}\right\}
+\text{min}\left\{1, \exp\left\{-\left(\alpha_{t}/m\right) \sum_{i=1}^{N}\left[d\left(r_{i},\rho'\right) - d\left(r_{i},\rho_{t}\right)\right]\right\} \frac{g\left(\rho_{t}|\rho'\right)}{g\left(\rho'|\rho_{t}\right)}\right\}
 \]</span></li>
 <li class="fragment">Acceptance probability <span class="math inline">\(A(\alpha',\alpha_{t})\)</span> for proposal <span class="math inline">\(\alpha'\)</span>: <span class="math display">\[
 \text{min}\left\{1, \frac{\left(\alpha'\right)^{\gamma-1} Z\left(\alpha_{t}\right)^{N}}{\alpha_{t}^{\gamma-1} Z\left(\alpha'\right)^{N}} \exp\left\{-\frac{\alpha'-\alpha_{t}}{m}\left[\lambda+\sum_{i=1}^{N}d\left(r_{i},\rho_{t}\right)\right]\right\}  \frac{g\left(\alpha_{t} | \alpha'\right)}{g\left(\alpha'|\alpha_{t}\right)}\right\}
@@ -2220,11 +2221,15 @@ g\left(\alpha' | \alpha_{t}\right) \propto \frac{\exp\left\{-\left(\ln \alpha' -
 <li class="fragment"><p>Leap-and-shift <span class="citation" data-cites="vitelliProbabilisticPreferenceLearning2017">(<a href="#/references" role="doc-biblioref" onclick="">Vitelli et al. 2017</a>)</span> proposal; swap proposal <span class="citation" data-cites="crispinoBayesianMallowsApproach2019">(<a href="#/references" role="doc-biblioref" onclick="">Crispino et al. 2019</a>)</span>.</p></li>
 <li class="fragment"><p>Symmetry <span class="math inline">\(g(\rho' | \rho_{t}) = g(\rho_{t} | \rho')\)</span>, always for swap, for leap-and-shift with leap size 1.</p></li>
 <li class="fragment"><p>Acceptance probability under symmetry <span class="math display">\[
-\text{min}\left\{1, \exp\left\{-\frac{\alpha_{t}}{m} \left[d\left(r_{i},\rho'\right) - d\left(r_{i},\rho_{t}\right)\right]\right\}\right\}
+\text{min}\left\{1, \exp\left\{-\frac{\alpha_{t}}{m} \sum_{i=1}^{N}\left[d\left(r_{i},\rho'\right) - d\left(r_{i},\rho_{t}\right)\right]\right\}\right\}
 \]</span></p></li>
 </ul>
 </div>
-</section></section>
+</section>
+<section id="leap-and-shift-proposal" class="slide level2">
+<h2>Leap-and-shift proposal</h2>
+
+<img data-src="figures/leap_and_shift.png" class="r-stretch"></section></section>
 <section>
 <section id="potato-data" class="title-slide slide level1 center">
 <h1>Potato data</h1>
@@ -2275,8 +2280,8 @@ A12 14 15 19 16 12 18  8 20  3   4   9   1   2   7  17   6   5  13  10  11</code
 <img data-src="presentation_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
 <section id="convergence-diagnostics-2" class="slide level2">
 <h2>Convergence diagnostics</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">4</span>)</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">4</span>)</span>
 <span id="cb6-2"><a href=""></a>mod <span class="ot">&lt;-</span> <span class="fu">compute_mallows</span>(</span>
 <span id="cb6-3"><a href=""></a>  <span class="at">data =</span> <span class="fu">setup_rank_data</span>(<span class="at">rankings =</span> potato_visual), </span>
 <span id="cb6-4"><a href=""></a>  <span class="at">compute_options =</span> <span class="fu">set_compute_options</span>(<span class="at">nmc =</span> <span class="dv">5000</span>), </span>
@@ -2336,25 +2341,25 @@ A12 14 15 19 16 12 18  8 20  3   4   9   1   2   7  17   6   5  13  10  11</code
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">compute_consensus</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     cluster ranking item cumprob
-1  Cluster 1       1  P12  0.9350
-2  Cluster 1       2  P13  0.8925
-3  Cluster 1       3   P9  0.9038
-4  Cluster 1       4  P10  0.9364
-5  Cluster 1       5  P17  0.8607
-6  Cluster 1       6   P7  0.8430
-7  Cluster 1       7  P14  0.8868
-8  Cluster 1       8  P16  0.8946
-9  Cluster 1       9   P1  0.4037
-10 Cluster 1      10   P5  0.6790
-11 Cluster 1      11  P11  0.8822
-12 Cluster 1      12  P19  0.9451
-13 Cluster 1      13  P20  0.5338
-14 Cluster 1      14  P18  0.9690
-15 Cluster 1      15   P6  0.9007
-16 Cluster 1      16   P4  0.7908
-17 Cluster 1      17   P2  0.7928
-18 Cluster 1      18  P15  0.9849
-19 Cluster 1      19   P3  0.9877
+1  Cluster 1       1  P12  1.0000
+2  Cluster 1       2  P13  1.0000
+3  Cluster 1       3   P9  0.9930
+4  Cluster 1       4  P10  0.9504
+5  Cluster 1       5  P17  0.9232
+6  Cluster 1       6   P7  0.8900
+7  Cluster 1       7  P14  1.0000
+8  Cluster 1       8  P16  0.9931
+9  Cluster 1       9   P1  0.4646
+10 Cluster 1      10   P5  0.6970
+11 Cluster 1      11  P11  0.9620
+12 Cluster 1      12  P19  0.9906
+13 Cluster 1      13  P20  0.5459
+14 Cluster 1      14  P18  1.0000
+15 Cluster 1      15   P6  0.9721
+16 Cluster 1      16   P4  0.7467
+17 Cluster 1      17   P2  0.7908
+18 Cluster 1      18  P15  1.0000
+19 Cluster 1      19   P3  1.0000
 20 Cluster 1      20   P8  1.0000</code></pre>
 </div>
 </div>
@@ -2416,7 +2421,7 @@ p\left(\alpha, \rho | \text{data}\right) =  \frac{\alpha^{\gamma -1 } \exp\left\
 <li class="fragment">Need to add sampling of <span class="math inline">\(r_{i}\)</span>.</li>
 <li class="fragment">Cost of <span class="math inline">\(M\)</span> iteration now becomes <span class="math inline">\(\mathcal{O}(NM)\)</span>, up from <span class="math inline">\(\mathcal{O}(M)\)</span> with complete data.</li>
 <li class="fragment">Proposing <span class="math inline">\(r_{i}\)</span> on <span class="math inline">\(\mathcal{S}_{i}\)</span> (symmetrically), accepting with probability <span class="math display">\[
-\exp\left\{-\frac{\alpha_{t}}{m} \left[d\left(r_{i}', \rho_{t}\right) - d\left(r_{i,t},\rho_{t}\right)\right]\right\}
+\exp\left\{-\frac{\alpha_{t}}{m} \sum_{i=1}^{N}\left[d\left(r_{i}', \rho_{t}\right) - d\left(r_{i,t},\rho_{t}\right)\right]\right\}
 \]</span></li>
 </ul>
 </div>
@@ -2424,7 +2429,7 @@ p\left(\alpha, \rho | \text{data}\right) =  \frac{\alpha^{\gamma -1 } \exp\left\
 <section id="beach-data" class="slide level2">
 <h2>Beach data</h2>
 
-<img data-src="figures/beach_data.png" class="r-stretch"></section>
+<img data-src="figures/beach_data.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="beach-data-1" class="slide level2">
 <h2>Beach data</h2>
 <div id="qwebr-insertion-location-4"></div>
@@ -2468,9 +2473,9 @@ p\left(\alpha, \rho | \text{data}\right) =  \frac{\alpha^{\gamma -1 } \exp\left\
 <h2>Mixtures of Mallows models</h2>
 <p>Complete ranking, C-component mixture:</p>
 <p><span class="math display">\[
-p\left(r | \theta\right) = \sum_{c=1}^{C}\frac{\tau_{c} \exp\left\{ - \left(\alpha_{c}/m\right) d\left(r, \rho_{c}\right)\right\}}{Z\left(\alpha_{c} \right)}
+p\left(r | \alpha_{1:C}, \rho_{1:C}, \tau_{1:C}\right) = \sum_{c=1}^{C}\frac{\tau_{c} \exp\left\{ - \left(\alpha_{c}/m\right) d\left(r, \rho_{c}\right)\right\}}{Z\left(\alpha_{c} \right)}
 \]</span></p>
-<p>with <span class="math inline">\(\theta = \{\alpha_{c}, \rho_{c}, \tau_{c}\}_{c=1}^{C}\)</span> and <span class="math inline">\(\sum_{c=1}^{C}\tau_{c}=1\)</span>.</p>
+<p>with <span class="math inline">\(\sum_{c=1}^{C}\tau_{c}=1\)</span>.</p>
 <div class="fragment">
 <ul>
 <li>Symmetric Dirichlet prior: <span class="math inline">\(\pi(\tau_{1},\dots,\tau_{C}) \propto \prod_{c=1}^{C} \tau_{c}^{\psi-1}\)</span>.</li>
@@ -2481,7 +2486,7 @@ p\left(r | \theta\right) = \sum_{c=1}^{C}\frac{\tau_{c} \exp\left\{ - \left(\alp
 <section id="markov-chain-monte-carlo" class="slide level2 smaller">
 <h2>Markov chain Monte Carlo</h2>
 <ul>
-<li>Metropolis-within-Gibbs(?) algorithm:</li>
+<li>Metropolis-within-Gibbs algorithm:</li>
 </ul>
 <div>
 <ol type="1">
@@ -2573,14 +2578,14 @@ p_{ic} = \frac{\tau_{c} \exp\left\{-\left(\alpha_{c}/m\right) d\left(r_{i}, \rho
 <pre><code># A tibble: 10 × 6
    ranking `Cluster 1`   `Cluster 2`   `Cluster 3`   `Cluster 4`   `Cluster 5`  
      &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;        
- 1       1 fatty tuna    shrimp        fatty tuna    fatty tuna    fatty tuna   
- 2       2 sea urchin    sea eel       tuna          salmon roe    sea urchin   
- 3       3 sea eel       squid         sea eel       tuna          salmon roe   
- 4       4 salmon roe    egg           shrimp        tuna roll     shrimp       
- 5       5 tuna          fatty tuna    tuna roll     shrimp        tuna         
- 6       6 shrimp        tuna          squid         squid         squid        
- 7       7 tuna roll     tuna roll     egg           sea eel       tuna roll    
- 8       8 squid         cucumber roll cucumber roll egg           sea eel      
+ 1       1 fatty tuna    fatty tuna    shrimp        fatty tuna    fatty tuna   
+ 2       2 sea urchin    tuna          sea eel       sea eel       sea urchin   
+ 3       3 salmon roe    shrimp        squid         tuna          salmon roe   
+ 4       4 tuna          tuna roll     egg           salmon roe    sea eel      
+ 5       5 shrimp        squid         fatty tuna    tuna roll     tuna         
+ 6       6 squid         egg           tuna          shrimp        shrimp       
+ 7       7 tuna roll     sea eel       tuna roll     squid         tuna roll    
+ 8       8 sea eel       cucumber roll cucumber roll egg           squid        
  9       9 egg           salmon roe    salmon roe    cucumber roll egg          
 10      10 cucumber roll sea urchin    sea urchin    sea urchin    cucumber roll</code></pre>
 </div>
@@ -2603,11 +2608,16 @@ p_{ic} = \frac{\tau_{c} \exp\left\{-\left(\alpha_{c}/m\right) d\left(r_{i}, \rho
 <section id="inconsistent-rankings" class="slide level2">
 <h2>Inconsistent rankings</h2>
 <p><span class="citation" data-cites="crispinoBayesianMallowsApproach2019">Crispino et al. (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span>:</p>
+<div>
 <ul>
-<li>Assume a truth <span class="math inline">\(\rho_{c}\)</span> exists.</li>
-<li>Inconsistencies are due to errors made by the assessor.</li>
-<li>Introduce an error parameter.</li>
+<li class="fragment">Assume a truth <span class="math inline">\(r_{i}\)</span> exists for each assessor, <span class="math display">\[
+p(r_{i}) = \frac{\exp\left\{-\alpha d\left(r_{i}, \rho\right)\right\}}{Z\left(\alpha\right)}.
+\]</span></li>
+<li class="fragment">Inconsistencies are due to errors made by the assessor, <span class="math display">\[
+p(A_{r} \prec A_{s} \in y_{i} | A_{s} \prec A_{r} \in r_{i}) \propto \theta.
+\]</span></li>
 </ul>
+</div>
 </section>
 <section id="sounds-data" class="slide level2">
 <h2>Sounds data</h2>
@@ -2641,36 +2651,34 @@ p_{ic} = \frac{\tau_{c} \exp\left\{-\left(\alpha_{c}/m\right) d\left(r_{i}, \rho
 </section>
 <section id="inconsistent-rankings-in-bayesmallows" class="slide level2">
 <h2>Inconsistent rankings in BayesMallows</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>dat <span class="ot">&lt;-</span> <span class="fu">setup_rank_data</span>(<span class="at">preferences =</span> sounds)</span>
-<span id="cb26-2"><a href=""></a><span class="fu">get_transitive_closure</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div id="qwebr-insertion-location-10"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="inconsistent-rankings-in-bayesmallows-1" class="slide level2">
 <h2>Inconsistent rankings in BayesMallows</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>mod <span class="ot">&lt;-</span> <span class="fu">compute_mallows</span>(</span>
-<span id="cb27-2"><a href=""></a>  <span class="at">data =</span> <span class="fu">setup_rank_data</span>(<span class="at">preferences =</span> sounds),</span>
-<span id="cb27-3"><a href=""></a>  <span class="at">compute_options =</span> <span class="fu">set_compute_options</span>(<span class="at">nmc =</span> <span class="dv">5000</span>),</span>
-<span id="cb27-4"><a href=""></a>  <span class="at">model_options =</span> <span class="fu">set_model_options</span>(<span class="at">error_model =</span> <span class="st">"bernoulli"</span>)</span>
-<span id="cb27-5"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>mod <span class="ot">&lt;-</span> <span class="fu">compute_mallows</span>(</span>
+<span id="cb26-2"><a href=""></a>  <span class="at">data =</span> <span class="fu">setup_rank_data</span>(<span class="at">preferences =</span> sounds),</span>
+<span id="cb26-3"><a href=""></a>  <span class="at">compute_options =</span> <span class="fu">set_compute_options</span>(<span class="at">nmc =</span> <span class="dv">5000</span>),</span>
+<span id="cb26-4"><a href=""></a>  <span class="at">model_options =</span> <span class="fu">set_model_options</span>(<span class="at">error_model =</span> <span class="st">"bernoulli"</span>)</span>
+<span id="cb26-5"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="convergence" class="slide level2">
 <h2>Convergence</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">assess_convergence</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">assess_convergence</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="presentation_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+<img data-src="presentation_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section id="posteriors-4" class="slide level2">
 <h2>Posteriors</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">burnin</span>(mod) <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb29-2"><a href=""></a><span class="fu">plot</span>(mod, <span class="at">parameter =</span> <span class="st">"theta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">burnin</span>(mod) <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb28-2"><a href=""></a><span class="fu">plot</span>(mod, <span class="at">parameter =</span> <span class="st">"theta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="presentation_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="presentation_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="the-end" class="title-slide slide level1 center">
 <h1>The end</h1>
