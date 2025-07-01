@@ -1,9 +1,0 @@
-"0","mod <- compute_mallows(
-  data = beach_data,
-  compute_options = set_compute_options(save_aug = TRUE)
-)
-assess_convergence(mod)
-assess_convergence(mod, parameter = ""rho"")
-assess_convergence(mod, parameter = ""Rtilde"")"
-"2","/bin/sh: webr-r: command not found
-"

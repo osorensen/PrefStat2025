@@ -1,6 +1,0 @@
-"0","prefs <- data.frame(
-  assessor = 1, bottom_item = c(2, 3), top_item = c(1, 2))
-get_transitive_closure(
-  setup_rank_data(preferences = prefs, n_items = 4))"
-"2","/bin/sh: webr-r: command not found
-"

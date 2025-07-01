@@ -156,6 +156,12 @@ window.Quarto = {
   <li><a href="#step-5-1" id="toc-step-5-1" class="nav-link" data-scroll-target="#step-5-1">Step 5</a></li>
   <li><a href="#step-6-bonus-question" id="toc-step-6-bonus-question" class="nav-link" data-scroll-target="#step-6-bonus-question">Step 6 (bonus question)</a></li>
   </ul></li>
+  <li><a href="#non-transitive-preferences" id="toc-non-transitive-preferences" class="nav-link" data-scroll-target="#non-transitive-preferences">Non-transitive preferences</a>
+  <ul class="collapse">
+  <li><a href="#step-1-3" id="toc-step-1-3" class="nav-link" data-scroll-target="#step-1-3">Step 1</a></li>
+  <li><a href="#step-2-3" id="toc-step-2-3" class="nav-link" data-scroll-target="#step-2-3">Step 2</a></li>
+  <li><a href="#step-3-3" id="toc-step-3-3" class="nav-link" data-scroll-target="#step-3-3">Step 3</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -188,6 +194,7 @@ window.Quarto = {
 </header>
 
 
+<p>This lab is using the <code>BayesMallows</code> package. The <a href="https://ocbe-uio.github.io/BayesMallows/index.html">package website</a> is an easy place to find the documentation.</p>
 <section id="preliminaries" class="level2">
 <h2 class="anchored" data-anchor-id="preliminaries">Preliminaries</h2>
 <p>Start by making sure you have version 2.2.4 or 2.2.5 of <code>BayesMallows</code> installed.</p>
@@ -195,7 +202,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"BayesMallows"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">"BayesMallows"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] '2.2.4'</code></pre>
+<pre><code>[1] '2.2.5'</code></pre>
 </div>
 </div>
 <p>If not, do <code>install.packages("BayesMallows")</code>.</p>
@@ -204,11 +211,11 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.0.4     
+✔ dplyr     1.1.4          ✔ readr     2.1.5     
+✔ forcats   1.0.0          ✔ stringr   1.5.1     
+✔ ggplot2   3.5.2.9001     ✔ tibble    3.3.0     
+✔ lubridate 1.9.4          ✔ tidyr     1.3.1     
+✔ purrr     1.0.4          
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
@@ -360,6 +367,21 @@ window.Quarto = {
 <section id="step-6-bonus-question" class="level3">
 <h3 class="anchored" data-anchor-id="step-6-bonus-question">Step 6 (bonus question)</h3>
 <p>Label switching is a serious issue in mixture modeling. In the last example in the documentation of <code>compute_mallows</code>, we outline how to check for label switching. Go through this example, and check if label switching seem to be an issue in your model.</p>
+</section>
+</section>
+<section id="non-transitive-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="non-transitive-preferences">Non-transitive preferences</h2>
+<section id="step-1-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-3">Step 1</h3>
+<p>Take a look at the <code>sounds</code> dataset in version 2.2.5 of <code>BayesMallows</code>. If you don’t have version 2.2.5, the easiest way to obtain the dataset is by downloading it from <a href="https://github.com/ocbe-uio/BayesMallows/tree/master/data">here</a> and to see the documentation <a href="https://ocbe-uio.github.io/BayesMallows/reference/sounds.html">here</a>.</p>
+</section>
+<section id="step-2-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-3">Step 2</h3>
+<p>Fit a Bayesian Mallows model with a Bernoulli error model to the sounds data, using a distance of your own choice.</p>
+</section>
+<section id="step-3-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-3">Step 3</h3>
+<p>Using <code>compute_mallows_mixtures</code>, see if you can find evidence of clusters in the sounds data.</p>
 
 </section>
 </section>

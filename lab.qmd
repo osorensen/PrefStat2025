@@ -9,6 +9,8 @@ editor: source
 bibliography: references.bib
 ---
 
+This lab is using the `BayesMallows` package. The [package website](https://ocbe-uio.github.io/BayesMallows/index.html) is an easy place to find the documentation.
+
 ## Preliminaries
 
 Start by making sure you have version 2.2.4 or 2.2.5 of `BayesMallows` installed.
@@ -148,3 +150,18 @@ Use the `plot` function with argument `parameter = "cluster_assignment"` to pred
 ### Step 6 (bonus question)
 
 Label switching is a serious issue in mixture modeling. In the last example in the documentation of `compute_mallows`, we outline how to check for label switching. Go through this example, and check if label switching seem to be an issue in your model.
+
+## Non-transitive preferences
+
+### Step 1 
+
+Take a look at the `sounds` dataset in version 2.2.5 of `BayesMallows`. If you don't have version 2.2.5, the easiest way to obtain the dataset is by downloading it from [here](https://github.com/ocbe-uio/BayesMallows/tree/master/data) and to see the documentation [here](https://ocbe-uio.github.io/BayesMallows/reference/sounds.html).
+
+### Step 2
+
+Fit a Bayesian Mallows model with a Bernoulli error model to the sounds data, using a distance of your own choice. 
+
+### Step 3
+
+Using `compute_mallows_mixtures`, see if you can find evidence of clusters in the sounds data.
+

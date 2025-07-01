@@ -1,4 +1,0 @@
-"0","beach_data <- setup_rank_data(preferences = beach_preferences)
-get_transitive_closure(beach_data)"
-"2","/bin/sh: webr-r: command not found
-"

@@ -1,4 +1,0 @@
-"0","compute_consensus(mod) %>% "
-"0","  as_tibble() %>% "
-"0","  select(-cumprob) %>% "
-"0","  pivot_wider(names_from = cluster, values_from = item)"

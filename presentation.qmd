@@ -12,6 +12,23 @@ editor: source
 bibliography: references.bib
 ---
 
+## Who am I?
+
+:::{.incremental}
+- Professor of Biostatistics, Department of Psychology, University of Oslo.
+- Integreat affiliated researcher.
+- Head of NORA Norwegian AI Research School (from 1st August 2025).
+- Homepage [https://osorensen.github.io/](https://osorensen.github.io/).
+:::
+
+## Rank work
+
+:::{.incremental}
+- @vitelliProbabilisticPreferenceLearning2017, @asfawTimevaryingRankingsBayesian2017
+- [BayesMallows](https://cran.r-project.org/web/packages/BayesMallows/index.html){preview-link=true}: @sorensenBayesMallowsPackageBayesian2020
+- @sorensenSequentialRankPreference2024
+:::
+
 ## Learning goals
 
 - Bayesian Mallows model [@vitelliProbabilisticPreferenceLearning2017]
@@ -207,7 +224,7 @@ potato_visual
 
 ## Convergence diagnostics
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 cl <- makeCluster(4)
 mod <- compute_mallows(
   data = setup_rank_data(rankings = potato_visual), 
@@ -218,7 +235,7 @@ stopCluster(cl)
 
 ## Convergence diagnostics
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 assess_convergence(mod) + scale_color_discrete(guide = "none")
 ```
 
@@ -226,7 +243,7 @@ assess_convergence(mod) + scale_color_discrete(guide = "none")
 
 ## Convergence diagnostics
 
-```{r, `code-line-numbers`="4", cache=TRUE}
+```{r, `code-line-numbers`="4", cache=FALSE}
 cl <- makeCluster(4)
 mod <- compute_mallows(
   data = setup_rank_data(rankings = potato_visual), 
@@ -237,13 +254,13 @@ stopCluster(cl)
 
 ## Convergence diagnostics
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 assess_convergence(mod) + scale_color_discrete(guide = "none")
 ```
 
 ## Convergence diagnostics
 
-```{r, message=TRUE, cache=TRUE}
+```{r, message=TRUE, cache=FALSE}
 assess_convergence(mod, parameter = "rho")
 ```
 
@@ -251,14 +268,14 @@ assess_convergence(mod, parameter = "rho")
 
 ## Posteriors
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 burnin(mod) <- 2500
 plot(mod)
 ```
 
 ## Posteriors
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 plot(mod, parameter = "rho", items = 1:4)
 ```
 
@@ -272,7 +289,7 @@ Cumulative probability consensus:
 
 ## CP consensus
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 compute_consensus(mod)
 ```
 
@@ -433,12 +450,12 @@ head(sushi_rankings)
 
 ## Mixtures in BayesMallows
 
-```{r, eval=FALSE, cache=TRUE}
-cl <- makeCluster(7)
+```{r, cache=FALSE}
+cl <- makeCluster(8)
 mod <- compute_mallows_mixtures(
-  n_clusters = 1:7,
+  n_clusters = 1:8,
   data = setup_rank_data(rankings = sushi_rankings),
-  compute_options = set_compute_options(include_wcd = TRUE),
+  compute_options = set_compute_options(nmc = 5000, include_wcd = TRUE),
   cl = cl
 )
 stopCluster(cl)
@@ -446,24 +463,24 @@ stopCluster(cl)
 
 ## Mixtures in BayesMallows
 
-```{r, eval=FALSE, cache=TRUE}
+```{r, cache=FALSE}
 assess_convergence(mod)
 ```
 
-![](figures/cluster_convergence.png)
+
 
 ## How many clusters?
 
-```{r, eval=FALSE, cache=TRUE}
-burnin(mod) <- 300
+```{r, cache=FALSE}
+burnin(mod) <- 1000
 plot_elbow(mod)
 ```
 
-![](figures/cluster_elbow.png)
+
 
 ## Five-cluster model
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 mod <- compute_mallows(
   data = setup_rank_data(rankings = sushi_rankings),
   model_options = set_model_options(n_clusters = 5)
@@ -472,30 +489,30 @@ mod <- compute_mallows(
 
 ## Five-cluster model
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 assess_convergence(mod)
 ```
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 burnin(mod) <- 500
 ```
 
 
 ## Posteriors for cluster weights
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 plot(mod, parameter = "cluster_probs")
 ```
 
 ## Where do I belong?
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 plot(mod, parameter = "cluster_assignment")
 ```
 
 ## Cluster consensus {.smaller}
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 compute_consensus(mod) %>% 
   as_tibble() %>% 
   select(-cumprob) %>% 
@@ -557,7 +574,7 @@ get_transitive_closure(dat)
 
 ## Inconsistent rankings in BayesMallows
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 mod <- compute_mallows(
   data = setup_rank_data(preferences = sounds),
   compute_options = set_compute_options(nmc = 5000),
@@ -567,13 +584,13 @@ mod <- compute_mallows(
 
 ## Convergence
 
-```{r, fig.height=5, cache=TRUE}
+```{r, fig.height=5, cache=FALSE}
 assess_convergence(mod)
 ```
 
 ## Posteriors
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 burnin(mod) <- 2000
 plot(mod, parameter = "theta")
 ```

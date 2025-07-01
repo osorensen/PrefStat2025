@@ -2060,6 +2060,27 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 
 </section>
+<section id="who-am-i" class="slide level2">
+<h2>Who am I?</h2>
+<div>
+<ul>
+<li class="fragment">Professor of Biostatistics, Department of Psychology, University of Oslo.</li>
+<li class="fragment">Integreat affiliated researcher.</li>
+<li class="fragment">Head of NORA Norwegian AI Research School (from 1st August 2025).</li>
+<li class="fragment">Homepage <a href="https://osorensen.github.io/">https://osorensen.github.io/</a>.</li>
+</ul>
+</div>
+</section>
+<section id="rank-work" class="slide level2">
+<h2>Rank work</h2>
+<div>
+<ul>
+<li class="fragment"><span class="citation" data-cites="vitelliProbabilisticPreferenceLearning2017">Vitelli et al. (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span>, <span class="citation" data-cites="asfawTimevaryingRankingsBayesian2017">Asfaw et al. (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span></li>
+<li class="fragment"><a href="https://cran.r-project.org/web/packages/BayesMallows/index.html" data-preview-link="true">BayesMallows</a>: <span class="citation" data-cites="sorensenBayesMallowsPackageBayesian2020">Sørensen et al. (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></li>
+<li class="fragment"><span class="citation" data-cites="sorensenSequentialRankPreference2024">Sørensen et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
+</ul>
+</div>
+</section>
 <section id="learning-goals" class="slide level2">
 <h2>Learning goals</h2>
 <ul>
@@ -2341,25 +2362,25 @@ A12 14 15 19 16 12 18  8 20  3   4   9   1   2   7  17   6   5  13  10  11</code
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">compute_consensus</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     cluster ranking item cumprob
-1  Cluster 1       1  P12  1.0000
-2  Cluster 1       2  P13  1.0000
-3  Cluster 1       3   P9  0.9930
-4  Cluster 1       4  P10  0.9504
-5  Cluster 1       5  P17  0.9232
-6  Cluster 1       6   P7  0.8900
-7  Cluster 1       7  P14  1.0000
-8  Cluster 1       8  P16  0.9931
-9  Cluster 1       9   P1  0.4646
-10 Cluster 1      10   P5  0.6970
-11 Cluster 1      11  P11  0.9620
-12 Cluster 1      12  P19  0.9906
-13 Cluster 1      13  P20  0.5459
-14 Cluster 1      14  P18  1.0000
-15 Cluster 1      15   P6  0.9721
-16 Cluster 1      16   P4  0.7467
-17 Cluster 1      17   P2  0.7908
-18 Cluster 1      18  P15  1.0000
-19 Cluster 1      19   P3  1.0000
+1  Cluster 1       1  P12  0.8408
+2  Cluster 1       2  P13  0.9055
+3  Cluster 1       3   P9  0.9029
+4  Cluster 1       4  P10  0.8293
+5  Cluster 1       5  P17  0.7441
+6  Cluster 1       6   P7  0.8083
+7  Cluster 1       7  P14  0.9064
+8  Cluster 1       8  P16  0.9638
+9  Cluster 1       9   P1  0.5060
+10 Cluster 1      10   P5  0.6144
+11 Cluster 1      11  P11  0.8443
+12 Cluster 1      12  P19  0.9011
+13 Cluster 1      13  P20  0.5524
+14 Cluster 1      14  P18  0.9753
+15 Cluster 1      15   P6  0.9802
+16 Cluster 1      16   P4  0.7742
+17 Cluster 1      17   P2  0.7786
+18 Cluster 1      18  P15  0.9368
+19 Cluster 1      19   P3  0.9570
 20 Cluster 1      20   P8  1.0000</code></pre>
 </div>
 </div>
@@ -2509,11 +2530,11 @@ p_{ic} = \frac{\tau_{c} \exp\left\{-\left(\alpha_{c}/m\right) d\left(r_{i}, \rho
 <section id="mixtures-in-bayesmallows" class="slide level2">
 <h2>Mixtures in BayesMallows</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">7</span>)</span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">8</span>)</span>
 <span id="cb14-2"><a href=""></a>mod <span class="ot">&lt;-</span> <span class="fu">compute_mallows_mixtures</span>(</span>
-<span id="cb14-3"><a href=""></a>  <span class="at">n_clusters =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>,</span>
+<span id="cb14-3"><a href=""></a>  <span class="at">n_clusters =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>,</span>
 <span id="cb14-4"><a href=""></a>  <span class="at">data =</span> <span class="fu">setup_rank_data</span>(<span class="at">rankings =</span> sushi_rankings),</span>
-<span id="cb14-5"><a href=""></a>  <span class="at">compute_options =</span> <span class="fu">set_compute_options</span>(<span class="at">include_wcd =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-5"><a href=""></a>  <span class="at">compute_options =</span> <span class="fu">set_compute_options</span>(<span class="at">nmc =</span> <span class="dv">5000</span>, <span class="at">include_wcd =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb14-6"><a href=""></a>  <span class="at">cl =</span> cl</span>
 <span id="cb14-7"><a href=""></a>)</span>
 <span id="cb14-8"><a href=""></a><span class="fu">stopCluster</span>(cl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2523,17 +2544,17 @@ p_{ic} = \frac{\tau_{c} \exp\left\{-\left(\alpha_{c}/m\right) d\left(r_{i}, \rho
 <h2>Mixtures in BayesMallows</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">assess_convergence</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
-<img data-src="figures/cluster_convergence.png" class="r-stretch"></section>
+</div>
+<img data-src="presentation_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="how-many-clusters" class="slide level2">
 <h2>How many clusters?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">burnin</span>(mod) <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">burnin</span>(mod) <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb16-2"><a href=""></a><span class="fu">plot_elbow</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
-<img data-src="figures/cluster_elbow.png" class="r-stretch"></section>
+</div>
+<img data-src="presentation_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
 <section id="five-cluster-model" class="slide level2">
 <h2>Five-cluster model</h2>
 <div class="cell">
@@ -2578,16 +2599,16 @@ p_{ic} = \frac{\tau_{c} \exp\left\{-\left(\alpha_{c}/m\right) d\left(r_{i}, \rho
 <pre><code># A tibble: 10 × 6
    ranking `Cluster 1`   `Cluster 2`   `Cluster 3`   `Cluster 4`   `Cluster 5`  
      &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;        
- 1       1 fatty tuna    fatty tuna    shrimp        fatty tuna    fatty tuna   
- 2       2 sea urchin    tuna          sea eel       sea eel       sea urchin   
- 3       3 salmon roe    shrimp        squid         tuna          salmon roe   
- 4       4 tuna          tuna roll     egg           salmon roe    sea eel      
- 5       5 shrimp        squid         fatty tuna    tuna roll     tuna         
- 6       6 squid         egg           tuna          shrimp        shrimp       
- 7       7 tuna roll     sea eel       tuna roll     squid         tuna roll    
- 8       8 sea eel       cucumber roll cucumber roll egg           squid        
- 9       9 egg           salmon roe    salmon roe    cucumber roll egg          
-10      10 cucumber roll sea urchin    sea urchin    sea urchin    cucumber roll</code></pre>
+ 1       1 fatty tuna    fatty tuna    fatty tuna    shrimp        fatty tuna   
+ 2       2 salmon roe    sea urchin    sea urchin    sea eel       tuna         
+ 3       3 tuna          sea eel       salmon roe    squid         sea eel      
+ 4       4 sea urchin    salmon roe    tuna          egg           shrimp       
+ 5       5 shrimp        shrimp        shrimp        salmon roe    tuna roll    
+ 6       6 squid         tuna          tuna roll     tuna          squid        
+ 7       7 tuna roll     squid         squid         fatty tuna    egg          
+ 8       8 sea eel       tuna roll     sea eel       tuna roll     cucumber roll
+ 9       9 egg           egg           egg           cucumber roll salmon roe   
+10      10 cucumber roll cucumber roll cucumber roll sea urchin    sea urchin   </code></pre>
 </div>
 </div>
 </section></section>
@@ -2688,6 +2709,9 @@ p(A_{r} \prec A_{s} \in y_{i} | A_{s} \prec A_{r} \in r_{i}) \propto \theta.
 <h2>References</h2>
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-asfawTimevaryingRankingsBayesian2017" class="csl-entry" role="listitem">
+Asfaw, Derbachew, Valeria Vitelli, Øystein Sørensen, Elja Arjas, and Arnoldo Frigessi. 2017. <span>“Time-Varying Rankings with the <span>Bayesian Mallows</span> Model.”</span> <em>Stat</em> 6 (1): 14–30. <a href="https://doi.org/10.1002/sta4.132">https://doi.org/10.1002/sta4.132</a>.
+</div>
 <div id="ref-barrettImpact3DSound2018" class="csl-entry" role="listitem">
 Barrett, Natasha, and Marta Crispino. 2018. <span>“The Impact of 3-<span>D</span> Sound Spatialisation on Listeners’ Understanding of Human Agency in Acousmatic Music.”</span> <em>Journal of New Music Research</em> 47 (5): 399–415. <a href="https://doi.org/10.1080/09298215.2018.1437187">https://doi.org/10.1080/09298215.2018.1437187</a>.
 </div>
@@ -2696,6 +2720,9 @@ Crispino, Marta, Elja Arjas, Valeria Vitelli, Natasha Barrett, and Arnoldo Frige
 </div>
 <div id="ref-sorensenBayesMallowsPackageBayesian2020" class="csl-entry" role="listitem">
 Sørensen, Øystein, Marta Crispino, Qinghua Liu, and Valeria Vitelli. 2020. <span>“<span>BayesMallows</span>: <span>An R Package</span> for the <span>Bayesian Mallows Model</span>.”</span> <em>The R Journal</em> 12 (1): 324–42. <a href="https://doi.org/10.32614/RJ-2020-026">https://doi.org/10.32614/RJ-2020-026</a>.
+</div>
+<div id="ref-sorensenSequentialRankPreference2024" class="csl-entry" role="listitem">
+Sørensen, Øystein, Anja Stein, Waldir Leoncio Netto, and David S. Leslie. 2024. <span>“Sequential <span>Rank</span> and <span>Preference Learning</span> with the <span>Bayesian Mallows Model</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.2412.13644">https://doi.org/10.48550/arXiv.2412.13644</a>.
 </div>
 <div id="ref-vitelliProbabilisticPreferenceLearning2017" class="csl-entry" role="listitem">
 Vitelli, Valeria, Øystein Sørensen, Marta Crispino, Arnoldo Frigessi, and Elja Arjas. 2017. <span>“Probabilistic Preference Learning with the Mallows Rank Model.”</span> <em>The Journal of Machine Learning Research</em> 18 (1): 5796–5844.
